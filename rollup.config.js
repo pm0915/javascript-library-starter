@@ -1,113 +1,36 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import terser from "@rollup/plugin-terser";
+import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
-import path from 'path';
 
-const lib = require("./package.json");
-const outputFileName = 'rtcsdk';
-const name = "rtcsdk";
-const namedInput = './index.js';
-const defaultInput = './src/rtcsdk.js';
-
-const buildConfig = ({ es5, browser = true, minifiedVersion = true, ...config }) => {
-  const { file } = config.output;
-  const ext = path.extname(file);
-  const basename = path.basename(file, ext);
-  const extArr = ext.split('.');
-  extArr.shift();
-
-
-  const build = ({ minified }) => ({
-    input: namedInput,
-    ...config,
-    output: {
-      ...config.output,
-      file: `${path.dirname(file)}/${basename}.${(minified ? ['min', ...extArr] : extArr).join('.')}`
-    },
-    plugins: [
-      json(),
-      resolve({ browser }),
-      commonjs(),
-      minified && terser(),
-      ...(es5 ? [babel({
-        babelHelpers: 'bundled',
-        presets: ['@babel/preset-env']
-      })] : []),
-      ...(config.plugins || []),
-    ]
-  });
-
-  const configs = [
-    build({ minified: false }),
-  ];
-
-  if (minifiedVersion) {
-    configs.push(build({ minified: true }))
-  }
-
-  return configs;
-};
-
-export default async () => {
-  const year = new Date().getFullYear();
-  const banner = `// RTCSDK v${lib.version} Copyright (c) ${year} ${lib.author} and contributors`;
-
-  return [
-    // browser ESM bundle for CDN
-    ...buildConfig({
-      input: namedInput,
-      output: {
-        file: `dist/esm/${outputFileName}.js`,
-        format: "esm",
-        preferConst: true,
-        exports: "named",
-        banner
-      }
+export default {
+  input: './src/index.js',
+  output: {
+    file: 'dist/rtc-sdk.js',
+    format: 'umd',
+    name: 'vrv',
+  },
+  plugins: [
+    resolve(),
+    commonjs(),
+    json(),
+    babel({
+      babelHelpers: 'bundled',
+      exclude: 'node_modules/**',
+      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            targets: {
+              browsers: ['> 1%', 'last 2 versions', 'not ie <= 8'],
+            },
+          },
+        ],
+      ],
     }),
-
-    // Browser UMD bundle for CDN
-    ...buildConfig({
-      input: defaultInput,
-      es5: true,
-      output: {
-        file: `dist/${outputFileName}.js`,
-        name,
-        format: "umd",
-        exports: "default",
-        banner
-      }
-    }),
-
-    // Browser CJS bundle
-    ...buildConfig({
-      input: defaultInput,
-      es5: false,
-      minifiedVersion: false,
-      output: {
-        file: `dist/browser/${name}.cjs`,
-        name,
-        format: "cjs",
-        exports: "default",
-        banner
-      }
-    }),
-
-    // Node.js commonjs bundle
-    {
-      input: defaultInput,
-      output: {
-        file: `dist/node/${name}.cjs`,
-        format: "cjs",
-        preferConst: true,
-        exports: "default",
-        banner
-      },
-      plugins: [
-        resolve(),
-        commonjs()
-      ]
-    }
-  ]
+    terser(),
+  ],
 };

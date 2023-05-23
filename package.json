@@ -3,18 +3,24 @@
   "version": "1.0.0",
   "description": "vrv rtc sdk",
   "main": "index.js",
-  "exports": {
-    ".": {
-      "browser": {
-        "require": "./dist/browser/rtcsdk.cjs",
-        "default": "./index.js"
-      },
-      "default": {
-        "require": "./dist/node/rtcsdk.cjs",
-        "default": "./index.js"
-      }
-    }
+  "type": "module",
+  "author": "Min Pan",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.18.0"
   },
+  "bugs": {
+    "url": "https://github.com/pm0915/RTCSDK/issues"
+  },
+  "homepage": "https://github.com/pm0915/RTCSDK#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pm0915/RTCSDK.git"
+  },
+  "keywords": [
+    "webRTC",
+    "mediasoup-client"
+  ],
   "scripts": {
     "test": "jest",
     "build": "cross-env NODE_ENV=production rollup -c -m",
@@ -30,23 +36,6 @@
     "changelog": "auto-changelog -p --commit-limit false -o CHANGELOG.md",
     "commit": "git add . && git-cz"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pm0915/RTCSDK.git"
-  },
-  "keywords": [
-    "webRTC",
-    "mediasoup-client"
-  ],
-  "author": "Min Pan",
-  "license": "MIT",
-  "engines": {
-    "node": ">=14.18.0"
-  },
-  "bugs": {
-    "url": "https://github.com/pm0915/RTCSDK/issues"
-  },
-  "homepage": "https://github.com/pm0915/RTCSDK#readme",
   "devDependencies": {
     "@babel/core": "^7.21.8",
     "@babel/preset-env": "^7.21.5",
@@ -70,7 +59,6 @@
     "release-it": "^15.10.3",
     "rollup": "^3.23.0"
   },
-  "sideEffects": false,
   "config": {
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
