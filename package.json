@@ -15,7 +15,6 @@
       }
     }
   },
-  "type": "module",
   "scripts": {
     "test": "jest",
     "build": "cross-env NODE_ENV=production rollup -c -m",
@@ -28,7 +27,8 @@
     "release:beta": "release-it --preRelease=beta",
     "release:no-npm": "release-it --no-npm",
     "release:changelog:fix": "git add CHANGELOG.md",
-    "release": "release-it"
+    "release": "release-it",
+    "commit": "git add . && git-cz"
   },
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "@babel/preset-env": "^7.21.5",
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@commitlint/cz-commitlint": "^17.5.0",
     "@release-it/conventional-changelog": "^5.1.1",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.0",
@@ -59,6 +60,7 @@
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.3",
     "auto-changelog": "^2.4.0",
+    "commitizen": "^4.3.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.41.0",
@@ -69,6 +71,11 @@
     "rollup": "^3.23.0"
   },
   "sideEffects": false,
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
   "lint-staged": {
     "*.js": [
       "eslint --fix",
