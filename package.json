@@ -5,10 +5,6 @@
   "main": "index.js",
   "exports": {
     ".": {
-      "types": {
-        "require": "./index.d.cts",
-        "default": "./index.d.ts"
-      },
       "browser": {
         "require": "./dist/browser/rtcsdk.cjs",
         "default": "./index.js"
@@ -20,25 +16,12 @@
     }
   },
   "type": "module",
-  "types": "index.d.ts",
   "scripts": {
-    "test": "npm run test:eslint && npm run test:mocha && npm run test:karma && npm run test:dtslint && npm run test:exports",
-    "test:eslint": "node bin/ssl_hotfix.js eslint lib/**/*.js",
-    "test:dtslint": "dtslint --localTs node_modules/typescript/lib",
-    "test:mocha": "node bin/ssl_hotfix.js mocha test/unit/**/*.js --timeout 30000 --exit",
-    "test:exports": "node bin/ssl_hotfix.js mocha test/module/test.js --timeout 30000 --exit",
-    "test:build:version": "node ./bin/check-build-version.js",
-    "start": "node ./sandbox/server.js",
-    "preversion": "gulp version",
-    "version": "npm run build && git add dist && git add package.json",
-    "prepublishOnly": "npm run test:build:version",
-    "postpublish": "git push && git push --tags",
-    "build": "gulp clear && cross-env NODE_ENV=production rollup -c -m",
-    "examples": "node ./examples/server.js",
+    "test": "jest",
+    "build": "cross-env NODE_ENV=production rollup -c -m",
     "coveralls": "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "fix": "eslint --fix src/**/*.js",
-    "prepare": "husky install && npm run prepare:hooks",
-    "prepare:hooks": "npx husky set .husky/commit-msg \"npx commitlint --edit $1\"",
+    "prepare": "husky install",
     "release:dry": "release-it --dry-run --no-npm",
     "release:info": "release-it --release-version",
     "release:beta:no-npm": "release-it --preRelease=beta --no-npm",
@@ -58,7 +41,7 @@
   "author": "Min Pan",
   "license": "MIT",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.18.0"
   },
   "bugs": {
     "url": "https://github.com/pm0915/RTCSDK/issues"
@@ -75,48 +58,19 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.3",
-    "@rollup/plugin-typescript": "^11.1.1",
-    "@types/node": "^20.2.3",
     "auto-changelog": "^2.4.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
-    "dtslint": "^4.2.1",
     "eslint": "^8.41.0",
-    "fs-extra": "^11.1.1",
-    "gulp": "^4.0.2",
-    "gzip-size": "^7.0.0",
     "husky": "^8.0.3",
     "jest": "^29.5.0",
     "lint-staged": "^13.2.2",
-    "minimist": "^1.2.8",
     "release-it": "^15.10.3",
-    "rollup": "^3.23.0",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
-    "typedoc": "^0.24.7",
-    "typescript": "^5.0.4"
+    "rollup": "^3.23.0"
   },
   "sideEffects": false,
-  "commitlint": {
-    "rules": {
-      "header-max-length": [
-        2,
-        "always",
-        130
-      ]
-    },
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "lint-staged": {
-    "*.{js,ts}": [
+    "*.js": [
       "eslint --fix",
       "git add"
     ]
