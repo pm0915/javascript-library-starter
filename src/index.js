@@ -1,10 +1,9 @@
-const { version } = require('../package.json');
-const config = require('./config');
-const sum = require('./sum');
+import sum from './sum';
+import config from './config';
+import { version } from '../package.json';
 
-const vrv = {};
-vrv.sum = sum;
-vrv.config = config;
-vrv.version = version;
-
-module.exports = vrv;
+export default {
+  sum,
+  config,
+  version,
+};

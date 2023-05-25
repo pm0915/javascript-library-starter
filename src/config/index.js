@@ -6,4 +6,4 @@ const config = {
   isLog: false,
 };
 
-module.exports = config;
+export default config;

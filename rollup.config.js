@@ -1,36 +1,26 @@
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
+import terser from '@rollup/plugin-terser';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
 import { babel } from '@rollup/plugin-babel';
+import { defineConfig } from 'rollup';
 
-export default {
-  input: './src/index.js',
+export default defineConfig({
+  input: 'src/index.js',
   output: {
-    file: 'dist/rtc-sdk.js',
+    file: 'dist/bundle.js',
     format: 'umd',
-    name: 'vrv',
+    name: 'myBundle',
+    sourcemap: true,
   },
   plugins: [
-    resolve(),
-    commonjs(),
     json(),
+    terser(),
+    commonjs(),
+    resolve(),
     babel({
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
-      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            targets: {
-              browsers: ['> 1%', 'last 2 versions', 'not ie <= 8'],
-            },
-          },
-        ],
-      ],
     }),
-    terser(),
   ],
-};
+});
