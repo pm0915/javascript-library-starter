@@ -4,12 +4,9 @@ module.exports = {
     es2018: true,
     node: true,
   },
-  extends: 'eslint:recommended',
+  extends: ['plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
-  },
-  rules: {
-    quotes: ['error', 'single'],
   },
 };
