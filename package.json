@@ -22,7 +22,7 @@
     "mediasoup-client"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "build": "cross-env NODE_ENV=production rollup -c -m",
     "coveralls": "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "fix": "eslint --fix src/**/*.js",
